@@ -1,0 +1,106 @@
+﻿@model MVC.Models.mvcAktivnosti
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>mvcAktivnosti</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Title
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Naslov)
+        </dd>
+
+        <dt>
+            Description
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.opis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.start)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.start)
+        </dd>
+
+        <dt>
+            Emp start
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.startRadnik)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.end)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.end)
+        </dd>
+
+        <dt>
+            Proj. Id
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.idProjekta)
+        </dd>
+
+        <dt>
+            Proj. name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProjIme)
+        </dd>
+
+        <dt>
+            Head Id
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.idNadredjenog)
+        </dd>
+
+        <dt>
+            Head Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NadrIme)
+        </dd>
+
+        <dt>
+           Emp Id
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.idRadnika)
+        </dd>
+
+        <dt>
+           Emp Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RadnikIme)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

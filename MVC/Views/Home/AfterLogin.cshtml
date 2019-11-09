@@ -1,0 +1,258 @@
+﻿@{
+    ViewBag.Title = "AfterLogin";
+}
+
+
+@if (Session["LogedUserFullname"] != "")
+{
+  
+
+    <br /><br />
+    <h1 class="alert-danger"> Welcome @Session["LogedUserFullname"].ToString() !</h1>
+    <h3>  Your id is:      @Session["LogedUserID"].ToString() </h3>
+
+    <h3>Level: @Session["LogedUserLevel"].ToString()</h3>
+
+    if (Session["LogedUserLevel"].ToString() == "User")
+    {
+        @*<h2>Head Id:@Session["LogedUserNadredjenId"].ToString()</h2>*@
+
+        <div class="alert alert-info" role="alert">
+            Head:<h2 id="HeadName"></h2>
+        </div>
+
+    }
+
+    <h2 class="alert-success">Projects</h2>
+    <div id="divProjekti"></div>
+    <h2 class="alert-info">Activities</h2>
+    <div id="divAktivnosti"></div>
+
+
+
+}
+else
+{
+    <text>
+        Wrong username or password
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+                // alert( $('#loginLink').html($('#loginLink').val()));
+                $('#loginLink').html('<a href="../Home/Login">Login</a>');
+                //  $('#loginLink').val();
+
+            });
+        </script>
+    </text>
+}
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            // alert( $('#loginLink').html($('#loginLink').val()));
+            $('#loginLink')
+                .html(
+                    '<a href="../Home/AfterLogin">@Session["LogedUserUsername"].ToString()</a><a href="../Home/AfterLogin">Logout</a>');
+
+
+            //  $('#loginLink').val();
+
+
+            getActivities();
+            var idNadredjenog;
+
+            if (@Session["LogedUserNadredjenId"].ToString().Length == 0) {
+
+                $('#HeadName').html();
+            } else {
+                idNadredjenog = @Session["LogedUserNadredjenId"] + "";
+
+                getNadredjenIme();
+                // idNadredjenog = 0;
+            }
+
+
+            function getNadredjenIme() {
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:59862/api/zaposleni/" + idNadredjenog,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        var nadime = $('#HeadName');
+
+
+                        nadime.html(data.Ime);
+
+
+                    },
+
+                    error: function(jqXhr) {
+
+                        alert(jqXhr.responseText);
+                    }
+                });
+
+            };
+
+
+            function getActivities() {
+
+
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:59862/api/activities?ajde=true&idradnika=" +
+                        @Session["LogedUserID"].ToString(),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        var aktivnosti = $('#divAktivnosti');
+
+                        var aktRezultat = '';
+                        aktivnosti.html('');
+
+                        var i = 0;
+                        var actEdit;
+                        var actEditName;
+                        if ("@Session["LogedUserLevel"].ToString()" == "User") {
+                            actEdit = "Start";
+                            actEditName = "Start";
+                        } else {
+                            actEdit = "AddOrEdit";
+                            actEditName = "Edit";
+                        }
+                        $.each(data,
+                            function(key, entry) {
+
+                                 {
+                                    i += 1;
+                                    aktRezultat +=
+                                        '<tr><td>' +
+                                        entry.id +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.Naslov +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.opis +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.start +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.startRadnik +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.end +
+                                        '</td>' +
+                                        '<td><a href="../../Aktivnosti/Details/' +
+                                        entry.id +
+                                        '">' +
+                                        'Details' +
+                                        '</a> | <a href="../../Aktivnosti/' +
+                                        actEdit +
+                                        '/' +
+                                        entry.id +
+                                        '">' +
+                                        actEditName +
+                                        '</a> </td>' +
+                                        '</tr>';
+                                }
+                            });
+
+                        if (i == 0) {
+                            aktivnosti.append("No activities worked on it as employee in past");
+                        } else {
+                            aktivnosti.append(
+                                '<table class="table table-striped"><thead class="table-bordered"><tr><th>Id</th><th>Title</th><th>Description</th><th>start</th><th>Emp. started</th><th>end</th><th>Actions</th></tr></thead><tbody class="table-hover">' +
+                                aktRezultat +
+                                '</tbody></table>');
+                        }
+                    },
+                    error: function(jqXhr) {
+
+                        alert(jqXhr.responseText);
+                    }
+                });
+
+            };
+
+
+            //**************************************Projekti
+            getProjects();
+
+            function getProjects() {
+
+
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:59862/api/project?idNadredjenog=" + @Session["LogedUserID"].ToString(),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        var projekti = $('#divProjekti');
+
+                        var projRezultat = '';
+                        projekti.html('');
+
+                        var i = 0;
+
+                        $.each(data,
+                            function(key, entry) {
+                                i += 1;
+                                projRezultat +=
+                                    '<tr><td>' +
+                                    entry.id +
+                                    '</td>' +
+                                    '<td>' +
+                                    entry.nazivProjekta +
+                                    '</td>' +
+                                    '<td>' +
+                                    entry.Opis +
+                                    '</td>' +
+                                    '<td>' +
+                                    entry.status +
+                                    '</td>' +
+                                    '<td><a href="../../Projekti/Details/' +
+                                    entry.id +
+                                    '">' +
+                                    'Details' +
+                                    '</a> | <a href="../../Projekti/AddOrEdit/' +
+                                    entry.id +
+                                    '">' +
+                                    'Edit' +
+                                    '</a> </td>' +
+                                    '</tr>';
+
+                            });
+                        if (i == 0) {
+                            projekti.append("No project worked on it as Head in past");
+                        } else {
+                            projekti.append(
+                                '<table class="table table-striped"><thead class="table-bordered"><tr><th>Id</th><th>Title</th><th>Description</th><th>status</th><th>Actions</th></tr></thead><tbody class="table-hover">' +
+                                projRezultat +
+                                '</tbody></table>');
+                        }
+                    },
+                    error: function(jqXhr) {
+
+                        alert(jqXhr.responseText);
+                    }
+                });
+
+            };
+        });
+    </script>
+}

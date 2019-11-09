@@ -1,0 +1,185 @@
+﻿@using System.Web.Mvc.Html
+@model MVC.Models.mvcProjekti
+
+@{
+    ViewBag.Title = "Details";
+}
+@if (((Session["LogedUserLevel"].ToString()=="Head" && Session["LogedUserId"].ToString()== Html.DisplayFor(model => model.idNadredjenog).ToString() && Html.ValueFor(model => model.status).ToString() != "False") ||  (Session["LogedUserLevel"].ToString()=="Administrator")))  {
+
+<br /><br />
+<h2>Details about project</h2>
+
+
+<div class="container">
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @*@Html.DisplayNameFor(model => model.nazivProjekta)*@
+            Project Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nazivProjekta)
+        </dd>
+
+        <dt>
+            @*@Html.DisplayNameFor(model => model.Opis)*@
+            Description
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Opis)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt>
+            @*@Html.DisplayNameFor(model => model.idNadredjenog)*@
+            Head Id
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.idNadredjenog)
+        </dd>
+
+        <dt>
+            @*@Html.DisplayNameFor(model => model.NadIme)*@
+            Head Name
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NadIme)
+        </dd>
+
+    </dl>
+</div>
+
+<input id="idProjekta" value="@Html.DisplayFor(model => model.id)" type="hidden" />
+
+<h2>Activities</h2>
+<div id="divAktivnosti"></div>
+
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.id }) |*@
+    @Html.ActionLink("Back to List", "Index")
+</p>
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">*@
+}
+else
+{
+
+    <text>
+<br /><br /><br />
+        You don't have privileges to see project if You are not Head of it or if status is  false-inactive.
+        Actually You can see only projects where You are Head and status is True-or Active.
+    </text>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+            $('#loginLink')
+                .html(
+                    '<a href="../Home/AfterLogin">@Session["LogedUserUsername"].ToString()</a><a href="../Home/AfterLogin">Logout</a>');
+
+
+
+            getActivities();
+
+            function getActivities() {
+
+
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:59862/api/activities?ajde=true&idradnika=" +
+                        @Html.DisplayFor(model => model.id),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        var aktivnosti = $('#divAktivnosti');
+
+                        var aktRezultat = '';
+                        aktivnosti.html('');
+
+                        var i = 0;
+                        var j = 0;
+                        $.each(data,
+                            function(key, entry) {
+                                i += 1;
+                                aktRezultat +=
+                                    '<tr><td>' +
+                                    entry.id +
+                                    '</td>' +
+                                    '<td>' +
+                                    entry.Naslov +
+                                    '</td>' +
+                                    '<td>' +
+                                    entry.opis +
+                                    '</td>' +
+                                    '<td>' +
+                                    entry.start +
+                                    '</td>' +
+                                    '<td>' +
+                                    entry.startRadnik +
+                                    '</td>' +
+                                    '<td>' +
+                                    entry.end +
+                                    '</td>' +
+                                    '<td>' +
+                                    entry.RadnikIme +
+                                    '</td>' +
+                                    '<td><a href="../../Aktivnosti/Details/' +
+                                    entry.id +
+                                    '">' +
+                                    'Details' +
+                                    '</a> | <a href="../../Aktivnosti/Edit/' +
+                                    entry.id +
+                                    '">' +
+                                    'Edit' +
+                                    '</a> </td>' +
+                                    '</tr>';
+
+                            });
+
+                        if (i == 0) {
+                            aktivnosti.append("No activities for this project yet.");
+                        } else {
+                            aktivnosti.append(
+                                '<table class="table table-striped"><thead class="table-bordered"><tr><th>Id</th><th>Title</th><th>Description</th><th>start</th><th>Emp. started</th><th>end</th><th>Emp. Name</th><th>Actions</th></tr></thead><tbody class="table-hover">' +
+                                aktRezultat +
+                                '</tbody></table>');
+                        }
+                    },
+                    error: function(jqXhr) {
+
+                        alert(jqXhr.responseText);
+                    }
+                });
+
+            };
+
+        });
+
+
+    </script>
+
+}

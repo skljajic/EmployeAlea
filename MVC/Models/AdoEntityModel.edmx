@@ -1,0 +1,424 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="dbAleaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblAktivnosti">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idProjekta" Type="int" Nullable="false" />
+          <Property Name="idNadredjenog" Type="int" Nullable="false" />
+          <Property Name="idRadnika" Type="int" Nullable="false" />
+          <Property Name="Naslov" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="opis" Type="text" />
+          <Property Name="start" Type="datetime" />
+          <Property Name="end" Type="datetime" />
+          <Property Name="startRadnik" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tblNadredjeni">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="Ime" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblProjekti">
+          <Key>
+            <PropertyRef Name="⁯id" />
+          </Key>
+          <Property Name="⁯id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idNadredjenog" Type="int" Nullable="false" />
+          <Property Name="nazivProjekta" Type="varchar" MaxLength="50" />
+          <Property Name="Opis" Type="text" />
+          <Property Name="status" Type="bit" />
+        </EntityType>
+        <EntityType Name="tblZaposleni">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Ime" Type="varchar" MaxLength="50" />
+          <Property Name="level" Type="varchar" MaxLength="15" />
+          <Property Name="status" Type="bit" />
+          <Property Name="nadredjen" Type="int" />
+        </EntityType>
+        <Association Name="FK__tblAktivn__idNad__09A971A2">
+          <End Role="tblNadredjeni" Type="Self.tblNadredjeni" Multiplicity="1" />
+          <End Role="tblAktivnosti" Type="Self.tblAktivnosti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNadredjeni">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblAktivnosti">
+              <PropertyRef Name="idNadredjenog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblAktivn__idPro__19DFD96B">
+          <End Role="tblProjekti" Type="Self.tblProjekti" Multiplicity="1" />
+          <End Role="tblAktivnosti" Type="Self.tblAktivnosti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProjekti">
+              <PropertyRef Name="⁯id" />
+            </Principal>
+            <Dependent Role="tblAktivnosti">
+              <PropertyRef Name="idProjekta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblAktivn__idPro__2739D489">
+          <End Role="tblProjekti" Type="Self.tblProjekti" Multiplicity="1" />
+          <End Role="tblAktivnosti" Type="Self.tblAktivnosti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProjekti">
+              <PropertyRef Name="⁯id" />
+            </Principal>
+            <Dependent Role="tblAktivnosti">
+              <PropertyRef Name="idProjekta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblAktivn__idRad__6383C8BA">
+          <End Role="tblZaposleni" Type="Self.tblZaposleni" Multiplicity="1" />
+          <End Role="tblAktivnosti" Type="Self.tblAktivnosti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblZaposleni">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblAktivnosti">
+              <PropertyRef Name="idRadnika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblProjek__idNad__151B244E">
+          <End Role="tblNadredjeni" Type="Self.tblNadredjeni" Multiplicity="1" />
+          <End Role="tblProjekti" Type="Self.tblProjekti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNadredjeni">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblProjekti">
+              <PropertyRef Name="idNadredjenog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblZaposl__nadre__08B54D69">
+          <End Role="tblNadredjeni" Type="Self.tblNadredjeni" Multiplicity="0..1" />
+          <End Role="tblZaposleni" Type="Self.tblZaposleni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNadredjeni">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblZaposleni">
+              <PropertyRef Name="nadredjen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="LoginByUsernamePassword" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="spAddEmployee" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="username" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="varchar" Mode="In" />
+          <Parameter Name="Ime" Type="varchar" Mode="In" />
+          <Parameter Name="level" Type="int" Mode="In" />
+          <Parameter Name="status" Type="bit" Mode="In" />
+          <Parameter Name="nadredjen" Type="int" Mode="In" />
+        </Function>
+        <Function Name="spAddProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idNadredjenog" Type="int" Mode="In" />
+          <Parameter Name="nazivProjekta" Type="varchar" Mode="In" />
+          <Parameter Name="opis" Type="text" Mode="In" />
+          <Parameter Name="status" Type="nchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="dbAleaModelStoreContainer">
+          <EntitySet Name="tblAktivnosti" EntityType="Self.tblAktivnosti" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblNadredjeni" EntityType="Self.tblNadredjeni" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblProjekti" EntityType="Self.tblProjekti" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblZaposleni" EntityType="Self.tblZaposleni" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__tblAktivn__idNad__09A971A2" Association="Self.FK__tblAktivn__idNad__09A971A2">
+            <End Role="tblNadredjeni" EntitySet="tblNadredjeni" />
+            <End Role="tblAktivnosti" EntitySet="tblAktivnosti" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblAktivn__idPro__19DFD96B" Association="Self.FK__tblAktivn__idPro__19DFD96B">
+            <End Role="tblProjekti" EntitySet="tblProjekti" />
+            <End Role="tblAktivnosti" EntitySet="tblAktivnosti" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblAktivn__idPro__2739D489" Association="Self.FK__tblAktivn__idPro__2739D489">
+            <End Role="tblProjekti" EntitySet="tblProjekti" />
+            <End Role="tblAktivnosti" EntitySet="tblAktivnosti" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblAktivn__idRad__6383C8BA" Association="Self.FK__tblAktivn__idRad__6383C8BA">
+            <End Role="tblZaposleni" EntitySet="tblZaposleni" />
+            <End Role="tblAktivnosti" EntitySet="tblAktivnosti" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblProjek__idNad__151B244E" Association="Self.FK__tblProjek__idNad__151B244E">
+            <End Role="tblNadredjeni" EntitySet="tblNadredjeni" />
+            <End Role="tblProjekti" EntitySet="tblProjekti" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblZaposl__nadre__08B54D69" Association="Self.FK__tblZaposl__nadre__08B54D69">
+            <End Role="tblNadredjeni" EntitySet="tblNadredjeni" />
+            <End Role="tblZaposleni" EntitySet="tblZaposleni" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="dbAleaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblAktivnosti">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="idProjekta" Type="Int32" Nullable="false" />
+          <Property Name="idNadredjenog" Type="Int32" Nullable="false" />
+          <Property Name="idRadnika" Type="Int32" Nullable="false" />
+          <Property Name="Naslov" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="opis" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="start" Type="DateTime" Precision="3" />
+          <Property Name="end" Type="DateTime" Precision="3" />
+          <Property Name="startRadnik" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tblNadredjeni" Relationship="Self.FK__tblAktivn__idNad__09A971A2" FromRole="tblAktivnosti" ToRole="tblNadredjeni" />
+          <NavigationProperty Name="tblProjekti" Relationship="Self.FK__tblAktivn__idPro__656C112C" FromRole="tblAktivnosti" ToRole="tblProjekti" />
+          <NavigationProperty Name="tblZaposleni" Relationship="Self.FK__tblAktivn__idRad__6383C8BA" FromRole="tblAktivnosti" ToRole="tblZaposleni" />
+        </EntityType>
+        <EntityType Name="tblNadredjeni">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="Ime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tblAktivnostis" Relationship="Self.FK__tblAktivn__idNad__09A971A2" FromRole="tblNadredjeni" ToRole="tblAktivnosti" />
+          <NavigationProperty Name="tblProjektis" Relationship="Self.FK__tblProjek__idNad__151B244E" FromRole="tblNadredjeni" ToRole="tblProjekti" />
+          <NavigationProperty Name="tblZaposlenis" Relationship="Self.FK__tblZaposl__nadre__08B54D69" FromRole="tblNadredjeni" ToRole="tblZaposleni" />
+        </EntityType>
+        <EntityType Name="tblProjekti">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idNadredjenog" Type="Int32" Nullable="false" />
+          <Property Name="nazivProjekta" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Opis" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Boolean" />
+          <NavigationProperty Name="tblAktivnostis" Relationship="Self.FK__tblAktivn__idPro__656C112C" FromRole="tblProjekti" ToRole="tblAktivnosti" />
+          <NavigationProperty Name="tblNadredjeni" Relationship="Self.FK__tblProjek__idNad__151B244E" FromRole="tblProjekti" ToRole="tblNadredjeni" />
+        </EntityType>
+        <EntityType Name="tblZaposleni">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Ime" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="level" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="status" Type="Boolean" />
+          <Property Name="nadredjen" Type="Int32" />
+          <NavigationProperty Name="tblAktivnostis" Relationship="Self.FK__tblAktivn__idRad__6383C8BA" FromRole="tblZaposleni" ToRole="tblAktivnosti" />
+          <NavigationProperty Name="tblNadredjeni" Relationship="Self.FK__tblZaposl__nadre__08B54D69" FromRole="tblZaposleni" ToRole="tblNadredjeni" />
+        </EntityType>
+        <Association Name="FK__tblAktivn__idNad__09A971A2">
+          <End Role="tblNadredjeni" Type="Self.tblNadredjeni" Multiplicity="1" />
+          <End Role="tblAktivnosti" Type="Self.tblAktivnosti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNadredjeni">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblAktivnosti">
+              <PropertyRef Name="idNadredjenog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblAktivn__idPro__656C112C">
+          <End Role="tblProjekti" Type="Self.tblProjekti" Multiplicity="1" />
+          <End Role="tblAktivnosti" Type="Self.tblAktivnosti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblProjekti">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblAktivnosti">
+              <PropertyRef Name="idProjekta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblAktivn__idRad__6383C8BA">
+          <End Role="tblZaposleni" Type="Self.tblZaposleni" Multiplicity="1" />
+          <End Role="tblAktivnosti" Type="Self.tblAktivnosti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblZaposleni">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblAktivnosti">
+              <PropertyRef Name="idRadnika" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblProjek__idNad__151B244E">
+          <End Role="tblNadredjeni" Type="Self.tblNadredjeni" Multiplicity="1" />
+          <End Role="tblProjekti" Type="Self.tblProjekti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNadredjeni">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblProjekti">
+              <PropertyRef Name="idNadredjenog" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__tblZaposl__nadre__08B54D69">
+          <End Role="tblNadredjeni" Type="Self.tblNadredjeni" Multiplicity="0..1" />
+          <End Role="tblZaposleni" Type="Self.tblZaposleni" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblNadredjeni">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tblZaposleni">
+              <PropertyRef Name="nadredjen" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dbAleaEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblAktivnostis" EntityType="Self.tblAktivnosti" />
+          <EntitySet Name="tblNadredjenis" EntityType="Self.tblNadredjeni" />
+          <EntitySet Name="tblProjektis" EntityType="Self.tblProjekti" />
+          <EntitySet Name="tblZaposlenis" EntityType="Self.tblZaposleni" />
+          <AssociationSet Name="FK__tblAktivn__idNad__09A971A2" Association="Self.FK__tblAktivn__idNad__09A971A2">
+            <End Role="tblNadredjeni" EntitySet="tblNadredjenis" />
+            <End Role="tblAktivnosti" EntitySet="tblAktivnostis" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblAktivn__idPro__656C112C" Association="Self.FK__tblAktivn__idPro__656C112C">
+            <End Role="tblProjekti" EntitySet="tblProjektis" />
+            <End Role="tblAktivnosti" EntitySet="tblAktivnostis" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblAktivn__idRad__6383C8BA" Association="Self.FK__tblAktivn__idRad__6383C8BA">
+            <End Role="tblZaposleni" EntitySet="tblZaposlenis" />
+            <End Role="tblAktivnosti" EntitySet="tblAktivnostis" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblProjek__idNad__151B244E" Association="Self.FK__tblProjek__idNad__151B244E">
+            <End Role="tblNadredjeni" EntitySet="tblNadredjenis" />
+            <End Role="tblProjekti" EntitySet="tblProjektis" />
+          </AssociationSet>
+          <AssociationSet Name="FK__tblZaposl__nadre__08B54D69" Association="Self.FK__tblZaposl__nadre__08B54D69">
+            <End Role="tblNadredjeni" EntitySet="tblNadredjenis" />
+            <End Role="tblZaposleni" EntitySet="tblZaposlenis" />
+          </AssociationSet>
+          <FunctionImport Name="LoginByUsernamePassword" ReturnType="Collection(dbAleaModel.LoginByUsernamePassword_Result)">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="spAddEmployee">
+            <Parameter Name="username" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="Ime" Mode="In" Type="String" />
+            <Parameter Name="level" Mode="In" Type="Int32" />
+            <Parameter Name="status" Mode="In" Type="Boolean" />
+            <Parameter Name="nadredjen" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="spAddProject">
+            <Parameter Name="idNadredjenog" Mode="In" Type="Int32" />
+            <Parameter Name="nazivProjekta" Mode="In" Type="String" />
+            <Parameter Name="opis" Mode="In" Type="String" />
+            <Parameter Name="status" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="LoginByUsernamePassword_Result">
+          <Property Type="Int32" Name="id" Nullable="false" />
+          <Property Type="String" Name="username" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="password" Nullable="false" MaxLength="25" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="dbAleaModelStoreContainer" CdmEntityContainer="dbAleaEntities">
+          <EntitySetMapping Name="tblAktivnostis">
+            <EntityTypeMapping TypeName="dbAleaModel.tblAktivnosti">
+              <MappingFragment StoreEntitySet="tblAktivnosti">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="idProjekta" ColumnName="idProjekta" />
+                <ScalarProperty Name="idNadredjenog" ColumnName="idNadredjenog" />
+                <ScalarProperty Name="idRadnika" ColumnName="idRadnika" />
+                <ScalarProperty Name="Naslov" ColumnName="Naslov" />
+                <ScalarProperty Name="opis" ColumnName="opis" />
+                <ScalarProperty Name="start" ColumnName="start" />
+                <ScalarProperty Name="end" ColumnName="end" />
+                <ScalarProperty Name="startRadnik" ColumnName="startRadnik" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblNadredjenis">
+            <EntityTypeMapping TypeName="dbAleaModel.tblNadredjeni">
+              <MappingFragment StoreEntitySet="tblNadredjeni">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblProjektis">
+            <EntityTypeMapping TypeName="dbAleaModel.tblProjekti">
+              <MappingFragment StoreEntitySet="tblProjekti">
+                <ScalarProperty Name="id" ColumnName="⁯id" />
+                <ScalarProperty Name="idNadredjenog" ColumnName="idNadredjenog" />
+                <ScalarProperty Name="nazivProjekta" ColumnName="nazivProjekta" />
+                <ScalarProperty Name="Opis" ColumnName="Opis" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblZaposlenis">
+            <EntityTypeMapping TypeName="dbAleaModel.tblZaposleni">
+              <MappingFragment StoreEntitySet="tblZaposleni">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="Ime" ColumnName="Ime" />
+                <ScalarProperty Name="level" ColumnName="level" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="nadredjen" ColumnName="nadredjen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="LoginByUsernamePassword" FunctionName="dbAleaModel.Store.LoginByUsernamePassword">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="dbAleaModel.LoginByUsernamePassword_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="spAddEmployee" FunctionName="dbAleaModel.Store.spAddEmployee" />
+          <FunctionImportMapping FunctionImportName="spAddProject" FunctionName="dbAleaModel.Store.spAddProject" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

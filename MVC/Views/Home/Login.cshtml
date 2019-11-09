@@ -1,0 +1,77 @@
+﻿@model MVC.Models.tblZaposleni
+
+@if (Session["LogedUserFullname"] == null)
+{
+    <br />
+    <br />
+    using (Html.BeginForm("Login", "Home", FormMethod.Post))
+    {
+        //this  is for create form tag
+        @Html.AntiForgeryToken() // this is for prevent CSRF attack
+        @Html.ValidationSummary(true)
+        if (@ViewBag.Message != null)
+        {
+            <div style="border: 1px solid red">
+                @ViewBag.Message
+            </div>
+        }
+        <table>
+            <tr>
+                <td>@Html.LabelFor(a => a.username)</td>
+                <td>@Html.TextBoxFor(a => a.username)</td>
+                <td>@Html.ValidationMessageFor(a => a.username)</td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(a => a.password)
+                </td>
+                <td>
+                    @Html.PasswordFor(a => a.password)
+                </td>
+                <td>
+                    @Html.ValidationMessageFor(a => a.password)
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Login" />
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    }
+
+
+}
+else
+{
+//@Session["LogedUserFullname"]=null;
+    <br />
+    <br />
+
+@* This below line is for create javascript section *@
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+               
+            $('#loginLink').html('<a href="../Home/AfterLogin">@Session["LogedUserUsername"]</a>  <a href="../Home/AfterLogin">Logout</a>');
+            alert('@Session["LogedUserFullname"]' +", You are logged actually...Don't need to do it twice...'");
+            window.location.href = "../Home/AfterLogin";
+        });
+    </script>
+
+}
+}

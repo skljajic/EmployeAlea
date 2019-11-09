@@ -1,0 +1,401 @@
+﻿@model MVC.Models.mvcZaposleni
+
+@{
+    /**/
+
+    ViewBag.Title = "Create";
+}
+@if ((Session["LogedUserLevel"].ToString() == "Head" && Session["LogedUserId"].ToString() == Html.DisplayFor(model => model.nadredjen).ToString() && Html.ValueFor(model => model.status).ToString() != "False") || (Session["LogedUserLevel"].ToString() == "Administrator") || (Session["LogedUserLevel"].ToString() == "Head" && Html.DisplayFor(model => model.id).ToString() == "0"))
+{
+    <h2>Add Or Edit</h2>
+
+
+    using (Html.BeginForm(null, null, FormMethod.Post, new { id = "registration", name = "registration" }))
+
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h4>Employee</h4>
+            <hr />
+            <div class="form-group">
+                @*@Html.LabelFor(model => model.id, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                
+                <div class="col-md-10">
+                      @Html.EditorFor(model => model.id, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })  @*@Html.ValidationMessageFor(model => model.id, "", new { @class = "text-danger" })*@
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                @*Html.LabelFor(model => model.Ime, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <label class="control-label col-md-2">Name</label>  
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Ime, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Ime, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.level, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.level, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.ValidationMessageFor(model => model.level, "", new { @class = "text-danger" })
+                    <select id="ddLevel" class="control-label col-md-2">
+                        <option value="User">User</option>
+                        <option value="Head">Head</option>
+                        <option value="Administrator">Administrator</option>
+
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.status, new { @class = "control-label col-md-2", @value = "true" })
+                        @Html.ValidationMessageFor(model => model.status, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @*Html.LabelFor(model => model.nadredjen, htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <label class="control-label col-md-2">Head</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.nadredjen, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                    @Html.ValidationMessageFor(model => model.nadredjen, "", new { @class = "text-danger" })
+                    <select id="dd" class="control-label col-md-2"></select>
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.NadIme, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.NadIme, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.NadIme, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" id="dugme" />
+                    <input type="button" value="Update" class="btn btn-default" id="dugmeUpdate" />
+
+
+                </div>
+            </div>
+
+        </div>
+    }
+
+    <div>
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+else
+{
+    <br />
+    <br />
+    <br />
+   
+        <div class="alert alert-warning" role="alert">
+            You don't have privileges to edit employee if You are not Head of it.
+            Actually You are able to edit only employees for those You are Head.
+        </div>
+        
+    
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            // alert($("#Ime").val());
+
+            $('#loginLink')
+                .html(
+                    '<a href="../Home/AfterLogin">@Session["LogedUserUsername"].ToString()</a><a href="../Home/AfterLogin">Logout</a>');
+
+
+            if ($("#Ime").val() != '') {
+                $("#dugme").val("Update");
+                $("#dugme").prop("type", "hidden");
+                //   alert($("#level").val());
+
+
+
+                if ($("#level").val() == 'Head') {
+                    //  alert($("#ddLevel").prop('selectedIndex'));
+                    $("#ddLevel").prop('selectedIndex', 1);
+
+                    //  alert($("#ddLevel").val());
+                    $("#dd").prop("disabled", true);
+                } else if ($("#level").val() == 'Administrator') {
+
+                    $("#ddLevel").prop('selectedIndex', 2);
+                    $("#dd").prop("disabled", true);
+                } else {
+                    $("#ddLevel").prop('selectedIndex', 0);
+                    $("#dd").prop("disabled", false);
+                }
+
+
+
+
+            } else {
+                $("#dugme").val("Create");
+                //   alert($("#dugme").val());
+                $("#dugme").prop("type", "submit");
+                $("#dugmeUpdate").prop("type", "hidden");
+
+            }
+
+            var ddvalue = $('#nadredjen');
+
+            var ddlevelValue = $('#level');
+
+
+            $("#registration").removeAttr("novalidate");
+
+            $("#status option[value='true']").attr("selected", true);
+
+
+            $.ajax({
+                method: "GET",
+                url: "http://localhost:59862/api/nadredjeni",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    var dropdown = $('#dd');
+
+                    dropdown.empty();
+
+                    $.each(data,
+                        function (key, entry) {
+
+
+                            dropdown.append($('<option></option>').attr('value', entry.id).text(entry.Ime));
+
+                        });
+
+
+                },
+                error: function (jqXhr) {
+
+                    alert(jqXhr.responseText);
+                }
+            });
+
+
+            $("#dugmeUpdate").click(function () {
+
+
+                var podaci;
+                var nadJesNije;
+
+                if ($("#ddLevel").val() === "User") {
+                    nadJesNije = $("#dd").val();
+                } else {
+                    nadJesNije = null;
+
+                }
+                //  alert(nadJesNije);
+
+                podaci = {
+                    id: $("#id").val(),
+                    Ime: $("#Ime").val(),
+                    username: $("#username").val(),
+                    password: $("#password").val(),
+                    level: $("#level").val(),
+                    status: $("#status").val(),
+                    nadredjen: nadJesNije
+
+                }
+
+                // alert(podaci);
+
+                $.ajax({
+                    url: 'http://localhost:59862/api/zaposleni/' + $("#id").val(), // your api url
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    method: "PUT",
+                    data: JSON.stringify(podaci),
+
+                    success: function () {
+
+                        alert("Success");
+                        window.location.href = '../';
+                    },
+                    error: function (jqXhr2) {
+
+                        alert(jqXhr2.responseText);
+                    }
+                });
+
+            });
+
+
+            $("#dd").change(function () {
+                var izabran = this.value;
+
+                ddvalue.val(izabran);
+
+            });
+
+            $("#ddLevel").change(function () {
+                var izabran = this.value;
+
+                ddlevelValue.val(izabran);
+
+                if (izabran != 'User') {
+
+                    $("#dd").prop("disabled", true);
+                } else {
+                    $("#dd").prop("disabled", false);
+                }
+
+            });
+
+
+            jQuery.validator.setDefaults({
+                debug: true,
+                success: "valid"
+            });
+
+            $("#dugme").click(function () {
+                alert("success");
+            });
+
+
+            $("#registration").validate({
+                rules: {
+                    Ime: "required",
+                    username: {
+                        prviKarakter: "^[a-zA-Z]",
+                        velikaSlova: "[A-Z]",
+                        required: true,
+                        minlength: 6,
+                        maxlength: 15
+                    },
+                    password: {
+                        velikaSlova: "[A-Z]",
+                        malaSlova: "[a-z]",
+                        broj: "[0-9]",
+                        specKar: "[(?=.*\W)]",
+                        required: true,
+
+                        minlength: 8,
+                        maxlength: 25
+                    },
+                    level: {
+                        required: true
+
+                    }
+                },
+
+                messages: {
+                    Ime: "Please enter your name",
+                    username: {
+                        required: "Please provide a username",
+                        minlength: "Your username must be at least 6 characters long",
+                        maxlength: "Your password must be at least 15 characters long"
+                    },
+                    password: {
+                        required: "Please provide a password",
+                        minlength: "Your password must be at least 8 characters long",
+                        maxlength: "Your password must be at least 25 characters long"
+                    }
+
+                },
+
+
+                submitHandler: function (form) {
+                    form.submit();
+                }
+
+            });
+
+            $.validator.addMethod(
+                "prviKarakter",
+                function (value, element, regexp) {
+                    var re = new RegExp(regexp);
+                    return this.optional(element) || re.test(value);
+                },
+                "Your username must start with letter"
+            );
+
+            $.validator.addMethod(
+                "velikaSlova",
+                function (value, element, regexp) {
+                    var re = new RegExp(regexp);
+                    return this.optional(element) || re.test(value);
+                },
+                "Your password must have at least one Highercase letter."
+            );
+
+            $.validator.addMethod(
+                "malaSlova",
+                function (value, element, regexp) {
+                    var re = new RegExp(regexp);
+                    return this.optional(element) || re.test(value);
+                },
+                "Your password must have at least one lowercase letter."
+            );
+
+            $.validator.addMethod(
+                "broj",
+                function (value, element, regexp) {
+                    var re = new RegExp(regexp);
+                    return this.optional(element) || re.test(value);
+                },
+                "Your password must have at least one number."
+            );
+
+            $.validator.addMethod(
+                "specKar",
+                function (value, element, regexp) {
+                    var re = new RegExp(regexp);
+                    return this.optional(element) || re.test(value);
+                },
+                "Your password must have at least one special character."
+            );
+
+
+        });
+    </script>
+
+
+
+}

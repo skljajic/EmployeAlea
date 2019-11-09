@@ -1,0 +1,397 @@
+﻿@model MVC.Models.mvcAktivnosti
+
+@{
+    ViewBag.Title = "AddOrEdit";
+}
+<br />
+<br />
+<h2>Edit selected activity</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.Naslov, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+            <label class="control-label col-md-2"> Title</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Naslov, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Naslov, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.opis, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2"> Description</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.opis, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.opis, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.start, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2"> Start by Head</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.start, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.start, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.startRadnik, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2"> Emp. start</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.startRadnik, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.startRadnik, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.end, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.end, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.end, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.idProjekta, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Project Name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.idProjekta, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                @Html.ValidationMessageFor(model => model.idProjekta, "", new { @class = "text-danger", @type = "hidden" })
+                <select id="ddProjekt"></select>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.ProjIme, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ProjIme, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                @Html.ValidationMessageFor(model => model.ProjIme, "", new { @class = "text-danger", @type = "hidden" })
+
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.idNadredjenog, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2"> Head</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.idNadredjenog, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                @Html.ValidationMessageFor(model => model.idNadredjenog, "", new { @class = "text-danger", @type = "hidden" })
+
+                <select id="ddNadredjen"></select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.NadrIme, htmlAttributes: new { @class = "control-label col-md-2" })*@
+
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NadrIme, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                @Html.ValidationMessageFor(model => model.NadrIme, "", new { @class = "text-danger", @type = "hidden" })
+            </div>
+
+
+        </div>
+
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.idRadnika, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <label class="control-label col-md-2">Emp name</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.idRadnika, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+                @Html.ValidationMessageFor(model => model.idRadnika, "", new { @class = "text-danger", @type = "hidden" })
+
+                <select id="ddRadnik"></select>
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.RadnikIme, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">*@
+        @Html.EditorFor(model => model.RadnikIme, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+        @Html.ValidationMessageFor(model => model.RadnikIme, "", new { @class = "text-danger", @type = "hidden" })
+        @*</div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @*<input type="submit" value="submit" id="dugmes" name="dugmes" class="btn btn-default" />*@
+                <input type="button" value="Update" id="dugme" name="dugme" class="btn btn-default" />
+
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+@Html.EditorFor(model => model.id, new { htmlAttributes = new { @class = "form-control", @type = "hidden" } })
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#loginLink')
+                .html(
+                    '<a href="../Home/AfterLogin">@Session["LogedUserUsername"].ToString()</a><a href="../Home/AfterLogin">Logout</a>');
+
+
+            $("#dugme").click(function (data) {
+
+
+                var podaci = {
+                    id: $("#id").val(),
+                    idProjekta: $("#idProjekta").val(),
+                    idRadnika: $("#idRadnika").val(),
+                    idNadredjenog: $("#idNadredjenog").val(),
+                    Naslov: $("#Naslov").val(),
+                    opis: $("#opis").val(),
+                    start: $("#start").val(),
+                    startRadnik: $("#startRadnik").val(),
+                    RadnikIme: $("#RadnikIme").val(),
+                    ProjIme: $("#ProjIme").val(),
+                    NadrIme: $("#NadrIme").val()
+                }
+
+                // alert(JSON.stringify(podaci));
+
+                $.ajax({
+                    url: 'http://localhost:59862/api/activities/' + $("#id").val(), // your api url
+                    contentType: "application/json; charset=utf-8",
+                    method: "PUT",
+                    data: JSON.stringify(podaci),
+
+                    success: function () {
+
+                        alert("Success");
+                        window.location.href = '../';
+                    },
+                    error: function (jqXhr2) {
+
+                        alert(jqXhr2.responseText);
+                    }
+                });
+            });
+
+            ucitajSveNadredjene();
+
+            function ucitajSveNadredjene() {
+
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:59862/api/nadredjeni",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+                        var dropdown = $('#ddNadredjen');
+
+                        dropdown.empty();
+
+                        $.each(data,
+                            function (key, entry) {
+
+
+                                dropdown.append($('<option></option>').attr('value', entry.id).text(entry.Ime));
+
+
+                            });
+                      //  $("#ddNadredjenog").val(nadredjenProjekta);
+                        $("#idNadredjenog").change();
+                    },
+                    error: function (jqXhr) {
+
+                        alert(jqXhr.responseText);
+                    }
+                });
+            }
+
+
+
+            $("#idNadredjenog").change(function () {
+
+                $("#ddNadredjen").val($("#idNadredjenog").val());
+
+            });
+
+            $("#ddNadredjen").change(function () {
+
+                $("#idNadredjenog").val($("#ddNadredjen").val());
+
+            });
+
+
+
+
+            //**********ucitaj projekte
+
+            ucitajProjekte();
+
+            function ucitajProjekte() {
+
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:59862/api/projekti",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var dropdown = $('#ddProjekt');
+
+                        dropdown.empty();
+
+                        $.each(data,
+                            function (key, entry) {
+                               // alert(entry.idNadredjenog);
+                                var idn = entry.idNadredjenog;
+                                if ("@Session["LogedUserLevel"].ToString()" == "Head" &&
+
+                                    entry.idNadredjenog == @Session["LogedUserId"].ToString())
+                                {
+                                dropdown.append($('<option></option>').attr('value', entry.id).text(entry.nazivProjekta));
+                              }
+                            });
+
+
+
+                        $("#idProjekta").change();
+                    },
+                    error: function (jqXhr) {
+
+                        alert(jqXhr.responseText);
+                    }
+                });
+            }
+
+
+
+            $("#idProjekta").change(function () {
+
+                $("#ddProjekt").val($("#idProjekta").val());
+            });
+
+
+
+            //*************************Ucitavanje radnika
+
+            if ($("#idNadredjenog").val() != null) {
+
+                ucitajRadnike();
+            }
+            $("#ddNadredjen").change(function () {
+                ucitajRadnike();
+
+            });
+
+            function ucitajRadnike() {
+
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:59862/api/zaposleni?level=User&idnadredjenog=" + $("#idNadredjenog").val(),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                        var dropdown = $('#ddRadnik');
+
+                        dropdown.empty();
+
+                        $.each(data,
+                            function (key, entry) {
+
+
+                                dropdown.append($('<option></option>').attr('value', entry.id).text(entry.Ime));
+
+                            });
+
+                        $("#idRadnika").change();
+                    },
+                    error: function (jqXhr) {
+
+                        alert(jqXhr.responseText);
+                    }
+                });
+            }
+
+
+
+            $("#idRadnika").change(function () {
+
+                $("#ddRadnik").val($("#idRadnika").val());
+            });
+
+
+
+            $("#ddRadnik").change(function () {
+
+                $("#idRadnika").val($("#ddRadnik").val());
+
+            });
+
+            $("#ddProjekt").change(function () {
+
+
+                ucitajSveNadredjene();
+                ucitajNadredjenog();
+            });
+
+            //********************************************
+            if ("@Session["LogedUserLevel"].ToString()" == "Head") {
+  // $("#ddProjekt").prop("disabled", true);
+            $("#ddNadredjen").prop("disabled", true);
+
+            }
+
+
+
+
+
+            //************************
+            function ucitajNadredjenog() {
+
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:59862/api/projekti/" + $('#ddProjekt').val(),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+
+
+                      $("#ddNadredjen").val(data.idNadredjenog);
+
+                    },
+                    error: function (jqXhr) {
+
+                        alert(jqXhr.responseText);
+                    }
+                });
+            }
+
+
+        });
+
+    </script>
+}

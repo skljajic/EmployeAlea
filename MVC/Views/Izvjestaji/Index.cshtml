@@ -1,0 +1,324 @@
+﻿@{
+    ViewBag.Title = "Reports";
+}
+
+<br />
+<br />
+
+    <h2>Report by project</h2>
+    <div class="container">
+        @*<div class="row">*@
+        <p>
+            <div class='col-sm-8'>
+                Start Date <input type='text' class="form-control" id='datetimepickerStart' />
+                <br />
+            </div>
+        </p>
+        <p>
+            <div class='col-sm-8'>
+                End Date <input type='text' class="form-control" id='datetimepickerEnd' />
+                <br />
+            </div>
+        </p>
+        <p>
+            <div class='col-sm-8 '>
+                Project <br />
+                <span class="custom-dropdown big">
+                    <select id="ddProjekt"> </select>
+                    <br />
+                </span>
+            </div>
+            <br />
+        </p>
+        <p>
+            <br />
+            <div class='col-sm-8'>
+                <br />
+                <button type="button" id="btnSearch" class="btn btn-primary"> Search</button>
+                <br />
+            </div>
+        </p>
+        <br /><br /><br /><br />
+        @*</div>*@
+
+
+    </div>
+
+    <br />
+    <div>
+        Spent time total(days):<label id="PotrosenoVrijeme"></label>
+        <br />
+        Total acts:<label id="brRezultata">0</label>
+        <br />
+        Finished acts:<label id="ZavrsenihAktivnosti"></label>
+        <br />
+        Unprocessed acts:<label id="NezapocetihAktivnosti"></label>
+        <br />
+        Unfinished, but processed acts:<label id="NezavrseneProcesuiraneAktivnosti"></label>
+
+    </div>
+    <div id="divAktivnosti"></div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+
+         
+            $('#loginLink').html('<a href="../Home/AfterLogin">@Session["LogedUserUsername"].ToString()</a><a href="../Home/AfterLogin">Logout</a>');
+
+
+
+            $('#datetimepickerStart').datetimepicker();
+            $('#datetimepickerEnd').datetimepicker();
+
+            ucitajProjekte();
+
+            function ucitajProjekte() {
+
+                $.ajax({
+                    method: "GET",
+                    url: "http://localhost:59862/api/projekti",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        var dropdown = $('#ddProjekt');
+
+                        dropdown.empty();
+
+                        $.each(data,
+                            function(key, entry) {
+                                
+                                if (("@Session["LogedUserLevel"].ToString()" == "Head" && entry.idNadredjenog==@Session["LogedUserId"].ToString() ) || "@Session["LogedUserLevel"].ToString()" == "Administrator") {
+                                dropdown.append($('<option></option>').attr('value', entry.id)
+                                    .text(entry.nazivProjekta + '' + ''));
+                                }
+                            });
+
+                        $("#idProjekta").change();
+                    },
+                    error: function(jqXhr) {
+
+                        alert(jqXhr.responseText);
+                    }
+                });
+            }
+
+
+            $('#btnSearch').click(function() {
+
+                if ((document.getElementById('datetimepickerStart').value.toString().length < 15) ||
+                    (document.getElementById('datetimepickerEnd').value.toString().length < 15)) {
+                    alert("All fields are mandatory!");
+                } else {
+
+                    var start = new Date(document.getElementById('datetimepickerStart').value);
+
+                    var startGodina = start.getFullYear();
+                    var startMjesec = start.getMonth() + 1;
+
+                    if (startMjesec.toString().length == 1) {
+                        //      startMjesec == "0" + startMjesec;
+                    }
+                    var startDan = start.getDate();
+
+                    if (startDan.toString().length == 1) {
+                        //   startDan == "0" + startDan;
+                    }
+
+                    var end = new Date(document.getElementById('datetimepickerEnd').value);
+                    var endGodina = end.getFullYear();
+                    var endMjesec = end.getMonth() + 1;
+                    if (endMjesec.toString().length == 1) {
+
+                        //   endMjesec = "0" + endMjesec;
+                    }
+
+                    var endDan = end.getDate();
+                    if (endDan.toString().length == 1) {
+                        //      endDan = "0" + endDan;
+                    }
+
+                    var idProjekta = $('#ddProjekt').val();
+
+                    baseURL = 'http://localhost:59862/api/activities?idPr=' +
+                        idProjekta +
+                        '&startyear=' +
+                        startGodina +
+                        '&startmonth=' +
+                        startMjesec +
+                        '&startday=' +
+                        startDan +
+                        '&endyear=' +
+                        endGodina +
+                        '&endmonth=' +
+                        endMjesec +
+                        '&endday=' +
+                        endDan;
+                    //     alert(baseURL);
+
+                    getActivities();
+
+                    function getActivities() {
+
+
+                        $.ajax({
+                            method: "GET",
+                            url: baseURL,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function(data) {
+                                // alert(data);
+                                var aktivnosti = $('#divAktivnosti');
+                                var days;
+                                var aktRezultat = '';
+                                aktivnosti.html('');
+
+                                var i = 0;
+                                $('#brRezultata').html();
+
+                                var zbirVremena = 0;
+                                var brojZavrsenih = 0;
+                                var unprocessedActs = 0;
+                                var unfinishedProcessedActs = 0;
+                                $.each(data,
+                                    function(key, entry) {
+
+
+                                        if (entry.startRadnik != null) {
+                                            days = 0;
+                                            // alert(entry.end);
+                                            var pocetakRadnik = new Date(entry.startRadnik);
+                                            var kraj = new Date(entry.end);
+
+                                            if (entry.end == null) {
+
+                                                var d = new Date($.now());
+                                                kraj = d;
+                                                brojZavrsenih -= 1;
+                                                unfinishedProcessedActs += 1;
+                                            } else {
+
+                                            }
+
+
+                                            var diff = new Date(kraj - pocetakRadnik);
+
+
+                                            days = diff / 1000 / 60 / 60 / 24;
+                                            days = days.toFixed(2);
+                                            zbirVremena += (diff / 1000 / 60 / 60 / 24);
+
+                                            zbirVremena = parseFloat(zbirVremena);
+                                            //   alert(zbirVremena);
+
+                                            brojZavrsenih += 1;
+                                        } else {
+                                            days = null;
+                                            unprocessedActs += 1;
+
+                                        }
+
+                                        i += 1;
+                                        aktRezultat +=
+                                            '<tr><td>' +
+                                            entry.id +
+                                            '</td>' +
+                                            '<td>' +
+                                            entry.Naslov +
+                                            '</td>' +
+                                            '<td>' +
+                                            entry.opis +
+                                            '</td>' +
+                                            '<td>' +
+                                            entry.start +
+                                            '</td>' +
+                                            '<td>' +
+                                            entry.startRadnik +
+                                            '</td>' +
+                                            '<td>' +
+                                            entry.end +
+                                            '</td>' +
+                                            '<td>' +
+                                            + days +
+                                            '</td>' +
+                                            '<td>' +
+                                            entry.RadnikIme +
+                                            '</td>' +
+                                            '<td><a href="../../Aktivnosti/Details/' +
+                                            entry.id +
+                                            '">' +
+                                            'Details' +
+                                            '</a> | <a href="../../Aktivnosti/Edit/' +
+                                            entry.id +
+                                            '">' +
+                                            'Edit' +
+                                            '</a> </td>' +
+                                            '</tr>';
+
+
+                                    });
+
+                                if (i == 0) {
+                                    aktivnosti.append("No activities for this search.");
+                                    $('#brRezultata').html(i);
+                                    $('#PotrosenoVrijeme').html('0');
+                                    $('#ZavrsenihAktivnosti').html('0');
+                                    $('#NezapocetihAktivnosti').html('0');
+                                    $('#NezavrseneProcesuiraneAktivnosti').html('0');
+                                } else {
+                                    aktivnosti.append(
+                                        '<br /><table class="table table-striped"><thead class="table-bordered"><tr><th>Id</th><th>Title</th><th>Description</th><th>start</th><th>Emp. started</th><th>end</th><th>days spent</th><th>Emp. Name</th><th>Actions</th></tr></thead><tbody class="table-hover">' +
+                                        aktRezultat +
+                                        '</tbody></table>');
+                                    $('#brRezultata').html(i);
+                                    $('#PotrosenoVrijeme').html(zbirVremena.toFixed(2));
+                                    $('#ZavrsenihAktivnosti').html(brojZavrsenih.toFixed(0));
+                                    $('#NezapocetihAktivnosti').html(unprocessedActs.toFixed(0));
+                                    $('#NezavrseneProcesuiraneAktivnosti').html(unfinishedProcessedActs.toFixed(0));
+                                }
+                            },
+                            error: function(jqXhr) {
+
+                                alert(jqXhr.responseText);
+                            }
+                        });
+                    }
+                };
+
+            });
+
+            function formatDate(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2)
+                    month = '0' + month;
+                if (day.length < 2)
+                    day = '0' + day;
+
+                return [month, year, day].join('/');
+            }
+        });
+    </script>
+
+
+}
+
