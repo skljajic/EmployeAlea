@@ -76,6 +76,32 @@ namespace WebApi.Controllers
             return Ok(activity);
         }
 
+        // GET: api/Activities/5
+        public IQueryable<Activity> GettblAktivnostis(bool ajde, int idr)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+
+            var zaposleni = from b in db.tblAktivnostis.Where(b=>b.idRadnika==idr)
+                //   where (b.id==6)
+                select new Activity()
+                {
+                    id = b.id,
+                    Naslov = b.Naslov,
+                    NadrIme = b.tblNadredjeni.Ime,
+                    opis = b.opis,
+                    start = b.start,
+                    end = b.end,
+                    startRadnik = b.startRadnik,
+                    idNadredjenog = b.idNadredjenog,
+                    idProjekta = b.idProjekta,
+                    ProjIme = b.tblProjekti.nazivProjekta,
+                    idRadnika = b.idRadnika,
+                    RadnikIme = b.tblZaposleni.Ime
+                };
+
+            return zaposleni;
+        }
+
         //// PUT: api/Activities/5
         //[ResponseType(typeof(void))]
         //public async Task<IHttpActionResult> PutActivity(int id, Activity activity)

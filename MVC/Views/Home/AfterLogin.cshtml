@@ -5,7 +5,7 @@
 
 @if (Session["LogedUserFullname"] != "")
 {
-  
+
 
     <br /><br />
     <h1 class="alert-danger"> Welcome @Session["LogedUserFullname"].ToString() !</h1>
@@ -64,7 +64,7 @@ else
             // alert( $('#loginLink').html($('#loginLink').val()));
             $('#loginLink')
                 .html(
-                    '<a href="../Home/AfterLogin">@Session["LogedUserUsername"].ToString()</a><a href="../Home/AfterLogin">Logout</a>');
+                    '<a href="../../Home/AfterLogin">@Session["LogedUserUsername"].ToString()</a><a href="../../Home/LogOut">Logout</a>');
 
 
             //  $('#loginLink').val();
@@ -136,7 +136,10 @@ else
                         $.each(data,
                             function(key, entry) {
 
-                                 {
+
+                                if ("@Session["LogedUserLevel"].ToString()" == "User" &&
+                                    entry.idRadnika == @Session["LogedUserId"].ToString() &&
+                                    entry.end == null) {
                                     i += 1;
                                     aktRezultat +=
                                         '<tr><td>' +
@@ -170,6 +173,84 @@ else
                                         '</a> </td>' +
                                         '</tr>';
                                 }
+
+                                if ("@Session["LogedUserLevel"].ToString()" == "Head" &&
+                                    entry.idNadredjenog == @Session["LogedUserId"].ToString()) {
+                                    i += 1;
+                                    aktRezultat +=
+                                        '<tr><td>' +
+                                        entry.id +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.Naslov +
+                                    '</td>' +
+
+                                        '<td>' +
+                                        entry.opis +
+                                    '</td>' +
+
+                                    '<td>' +
+                                    entry.nadime +
+                                        '</td>' +
+
+                                        '<td>' +
+                                        entry.start +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.startRadnik +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.end +
+                                        '</td>' +
+                                        '<td><a href="../../Aktivnosti/Details/' +
+                                        entry.id +
+                                        '">' +
+                                        'Details' +
+                                        '</a> | <a href="../../Aktivnosti/' +
+                                        actEdit +
+                                        '/' +
+                                        entry.id +
+                                        '">' +
+                                        actEditName +
+                                        '</a> </td>' +
+                                        '</tr>';
+                                }
+
+                                if ("@Session["LogedUserLevel"].ToString()" == "Administrator") {
+                                    i += 1;
+                                    aktRezultat +=
+                                        '<tr><td>' +
+                                        entry.id +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.Naslov +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.opis +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.start +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.startRadnik +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.end +
+                                        '</td>' +
+                                        '<td><a href="../../Aktivnosti/Details/' +
+                                        entry.id +
+                                        '">' +
+                                        'Details' +
+                                        '</a> | <a href="../../Aktivnosti/' +
+                                        actEdit +
+                                        '/' +
+                                        entry.id +
+                                        '">' +
+                                        actEditName +
+                                        '</a> </td>' +
+                                        '</tr>';
+                                }
+
                             });
 
                         if (i == 0) {
@@ -211,30 +292,62 @@ else
 
                         $.each(data,
                             function(key, entry) {
-                                i += 1;
-                                projRezultat +=
-                                    '<tr><td>' +
-                                    entry.id +
-                                    '</td>' +
-                                    '<td>' +
-                                    entry.nazivProjekta +
-                                    '</td>' +
-                                    '<td>' +
-                                    entry.Opis +
-                                    '</td>' +
-                                    '<td>' +
-                                    entry.status +
-                                    '</td>' +
-                                    '<td><a href="../../Projekti/Details/' +
-                                    entry.id +
-                                    '">' +
-                                    'Details' +
-                                    '</a> | <a href="../../Projekti/AddOrEdit/' +
-                                    entry.id +
-                                    '">' +
-                                    'Edit' +
-                                    '</a> </td>' +
-                                    '</tr>';
+
+                                if (entry.idNadredjenog == @Session["LogedUserId"].ToString() &&
+                                    "@Session["LogedUserLevel"].ToString()" == "Head" && entry.status==true) {
+                                    i += 1;
+                                    projRezultat +=
+                                        '<tr><td>' +
+                                        entry.id +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.nazivProjekta +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.Opis +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.status +
+                                        '</td>' +
+                                        '<td><a href="../../Projekti/Details/' +
+                                        entry.id +
+                                        '">' +
+                                        'Details' +
+                                        '</a> | <a href="../../Projekti/AddOrEdit/' +
+                                        entry.id +
+                                        '">' +
+                                        'Edit' +
+                                        '</a> </td>' +
+                                        '</tr>';
+                                }
+
+                                if ("@Session["LogedUserLevel"].ToString()" == "Administrator") {
+                                    i += 1;
+                                    projRezultat +=
+                                        '<tr><td>' +
+                                        entry.id +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.nazivProjekta +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.Opis +
+                                        '</td>' +
+                                        '<td>' +
+                                        entry.status +
+                                        '</td>' +
+                                        '<td><a href="../../Projekti/Details/' +
+                                        entry.id +
+                                        '">' +
+                                        'Details' +
+                                        '</a> | <a href="../../Projekti/AddOrEdit/' +
+                                        entry.id +
+                                        '">' +
+                                        'Edit' +
+                                        '</a> </td>' +
+                                        '</tr>';
+                                }
+
 
                             });
                         if (i == 0) {

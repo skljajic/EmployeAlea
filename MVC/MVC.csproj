@@ -336,7 +336,7 @@
     <Content Include="Views\Aktivnosti\AddOrEdit.cshtml" />
     <Content Include="Views\Aktivnosti\Edit.cshtml" />
     <Content Include="Views\Aktivnosti\Start.cshtml" />
-    <Content Include="Views\Home\LogOff.cshtml" />
+    <Content Include="Views\Home\LogOut.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

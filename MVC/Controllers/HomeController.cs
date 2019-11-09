@@ -119,26 +119,25 @@ namespace MVC.Controllers
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff(tblZaposleni u)
+       // [HttpPost]
+     //   [ValidateAntiForgeryToken]
+        public ActionResult LogOut()
         {
             // this action is for handle post (login)
-            if (ModelState.IsValid) // this is check validity
-            {
-                 
-                Session["LogedUserID"] = "";
-                    Session["LogedUserFullname"] = "";
-                    Session["LogedUserLevel"] = "";
-                    Session["LogedUserNadredjenId"] = "";
-                    Session["LogedUserStatus"] = "";
-                    Session["LogedUserPassword"] = "";
-
-                    //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 
 
-            }
-            return RedirectToAction("LogOff");
+            Session["LogedUserID"] = null;
+                    Session["LogedUserFullname"] = null;
+                    Session["LogedUserLevel"] = null;
+                    Session["LogedUserNadredjenId"] = null;
+                    Session["LogedUserStatus"] = null;
+                    Session["LogedUserPassword"] = null;
+
+            //AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+
+            return View();
+
+//            return RedirectToAction("LogOut");
         }
     }
 

@@ -8,11 +8,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using WebApi.Models;
 
 namespace WebApi.Controllers
 {
+    [EnableCors(origins: "http://localhost:49958", headers: "*", methods: "*")]
     public class ProjectController : ApiController
     {
         private dbAleaEntities db = new dbAleaEntities();
